@@ -14,12 +14,13 @@ import List from "../component/list/List";
 import styles from "./Dashboard.module.css";
 import Card from "../component/card/Card";
 
+//stories
+
 const Dashboard = () => {
   const [currency, setCurrency] = useState("EUR");
   const [searchText, setSearchText] = useState("");
   const [selectedOrderDetails, setSelectedOrderDetails] = useState({});
   const [selectedOrderTimeStamps, setSelectedOrderTimeStamps] = useState({});
-  const [updatedRow , setUpdatedRow] = useState();
 
   const filteredRows = mockData.results.filter((row) => {
     const searchLowerCase = searchText.toLowerCase();
@@ -30,9 +31,32 @@ const Dashboard = () => {
     );
   });
 
-  
+  function handleOrder(order) {
+    let orderId = order[0].props.children;
+    console.log(orderId);
 
-  
+    const foundTimestamps = timestamps.results.find(
+      (timestampData) => timestampData["&id"] === orderId
+    );
+
+    if (foundTimestamps) {
+      setSelectedOrderTimeStamps(foundTimestamps.timestamps);
+    } else {
+      setSelectedOrderTimeStamps({});
+    }
+
+    const foundOrderDetails = mockData.results.find(
+      (rowData) => rowData["&id"] === orderId
+    );
+
+    console.log(foundOrderDetails.executionDetails);
+
+    if (foundOrderDetails && foundOrderDetails.executionDetails) {
+      setSelectedOrderDetails(foundOrderDetails.executionDetails);
+    } else {
+      setSelectedOrderDetails({});
+    }
+  }
 
   return (
     <div>
@@ -51,6 +75,8 @@ const Dashboard = () => {
             onChange={(e) => setCurrency(e.target.value)}
             selectedItem={currency}
           />
+         
+         
         </div>
       </div>
       <div className={styles.content}>
@@ -68,7 +94,7 @@ const Dashboard = () => {
           rows={filteredRows}
           timestampVal={timestamps.results}
           curr={currency}
-        
+          handleOrder={handleOrder}
         />
       </div>
     </div>
