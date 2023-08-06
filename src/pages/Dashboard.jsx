@@ -22,11 +22,11 @@ const Dashboard = () => {
   const [selectedOrderDetails, setSelectedOrderDetails] = useState({});
   const [selectedOrderTimeStamps, setSelectedOrderTimeStamps] = useState({});
 
-  const filteredRows = mockData.results.filter((row) => {
-    const searchLowerCase = searchText.toLowerCase();
-    const orderIDLowerCase = row["&id"].toLowerCase();
+  const newRow = mockData.results.filter((row) => {
+    const searchLower = searchText.toLowerCase();
+    const orderIdLower = row["&id"].toLowerCase();
     return (
-      orderIDLowerCase.includes(searchLowerCase) &&
+      orderIdLower.includes(searchLower) &&
       (currency === "USD" || row.bestExecutionData.orderVolume[currency])
     );
   });
@@ -91,7 +91,7 @@ const Dashboard = () => {
           />
         </div>
         <List
-          rows={filteredRows}
+          rows={newRow}
           timestampVal={timestamps.results}
           curr={currency}
           handleOrder={handleOrder}
